@@ -1,0 +1,501 @@
+/* ==========================================================================
+   win98.css  ·  Sistema de ventanas retro (Windows 98/XP + Messenger)
+   --------------------------------------------------------------------------
+   Aquí vive TODO lo que hace que la web parezca un escritorio antiguo:
+   ventanas, barras de título, botones, campos, pestañas, barras de progreso.
+   Si quieres cambiar los colores, toca solo el bloque :root de abajo.
+   ========================================================================== */
+
+:root {
+  /* --- Paleta ----------------------------------------------------------- */
+  --gris:            #d4d0c8;  /* gris clásico de las ventanas */
+  --gris-claro:      #efefef;
+  --gris-oscuro:     #808080;
+  --gris-sombra:     #404040;
+  --blanco:          #ffffff;
+  --negro:           #000000;
+
+  --azul-barra-1:    #0a246a;  /* degradado de la barra de título activa */
+  --azul-barra-2:    #3a6ea5;
+  --azul-barra-off1: #808080;  /* barra de título inactiva */
+  --azul-barra-off2: #b5b5b5;
+  --azul-seleccion:  #000080;
+
+  --escritorio:      #3a6ea5;  /* fondo del "escritorio" */
+  --escritorio-2:    #1c3f66;
+
+  /* Acentos saturados muy 2000 */
+  --rosa:            #ff00a0;
+  --cian:            #00e5ff;
+  --lima:            #7fff00;
+  --amarillo:        #ffe600;
+  --naranja:         #ff7b00;
+  --morado:          #9b30ff;
+  --rojo-dk:         #c60c30;  /* rojo de la bandera danesa */
+
+  --fuente: Tahoma, "Trebuchet MS", Verdana, Geneva, sans-serif;
+  --fuente-mono: "Lucida Console", "Courier New", monospace;
+}
+
+/* --- Reset mínimo --------------------------------------------------------- */
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--fuente);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--negro);
+  background: var(--escritorio);
+  /* Patrón de escritorio: cuadrícula tenue como los fondos de los 2000 */
+  background-image:
+    linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px),
+    radial-gradient(circle at 50% 0%, var(--azul-barra-2), var(--escritorio-2));
+  background-size: 32px 32px, 32px 32px, 100% 100%;
+  background-attachment: fixed;
+  padding-bottom: 60px; /* hueco para la barra de tareas fija */
+}
+
+img { max-width: 100%; height: auto; }
+
+/* Todo el pixel art debe verse cuadriculado, nunca borroso */
+img.pixel, .pixel img, canvas.pixel {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* ==========================================================================
+   BISELES  ·  el truco visual de toda la interfaz
+   .biselado    → parece que sobresale (botones, ventanas)
+   .hundido     → parece hundido (campos de texto, zonas de contenido)
+   ========================================================================== */
+
+.biselado {
+  border: 2px solid;
+  border-color: var(--blanco) var(--gris-sombra) var(--gris-sombra) var(--blanco);
+  box-shadow: inset 1px 1px 0 var(--gris-claro), inset -1px -1px 0 var(--gris-oscuro);
+}
+
+.hundido {
+  border: 2px solid;
+  border-color: var(--gris-sombra) var(--blanco) var(--blanco) var(--gris-sombra);
+  box-shadow: inset 1px 1px 0 var(--gris-oscuro), inset -1px -1px 0 var(--gris-claro);
+}
+
+/* ==========================================================================
+   VENTANAS
+   ========================================================================== */
+
+.ventana {
+  background: var(--gris);
+  border: 2px solid;
+  border-color: var(--blanco) var(--gris-sombra) var(--gris-sombra) var(--blanco);
+  box-shadow:
+    inset 1px 1px 0 var(--gris-claro),
+    inset -1px -1px 0 var(--gris-oscuro),
+    4px 4px 0 rgba(0,0,0,.35);
+  margin: 0 0 22px;
+  padding: 3px;
+  /* Evita que una ventana con tabla ancha rompa el ancho de la página */
+  min-width: 0;
+}
+
+.ventana__barra {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(90deg, var(--azul-barra-1), var(--azul-barra-2));
+  color: var(--blanco);
+  font-weight: bold;
+  font-size: 12px;
+  padding: 3px 4px 3px 6px;
+  user-select: none;
+  cursor: default;
+}
+
+.ventana__barra--inactiva {
+  background: linear-gradient(90deg, var(--azul-barra-off1), var(--azul-barra-off2));
+}
+
+/* Variantes de color para distinguir secciones de un vistazo */
+.ventana__barra--rosa    { background: linear-gradient(90deg, #8a005a, var(--rosa)); }
+.ventana__barra--verde   { background: linear-gradient(90deg, #146b14, #3cb043); }
+.ventana__barra--naranja { background: linear-gradient(90deg, #a33f00, var(--naranja)); }
+.ventana__barra--morado  { background: linear-gradient(90deg, #4b0082, var(--morado)); }
+.ventana__barra--rojo    { background: linear-gradient(90deg, #7a0018, var(--rojo-dk)); }
+
+.ventana__icono {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  image-rendering: pixelated;
+}
+
+.ventana__titulo {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 1px 1px 0 rgba(0,0,0,.4);
+}
+
+.ventana__botones { display: flex; gap: 2px; flex: 0 0 auto; }
+
+.ventana__boton {
+  width: 18px;
+  height: 16px;
+  padding: 0;
+  font-family: var(--fuente-mono);
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 1;
+  color: var(--negro);
+  background: var(--gris);
+  border: 2px solid;
+  border-color: var(--blanco) var(--gris-sombra) var(--gris-sombra) var(--blanco);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ventana__boton:active {
+  border-color: var(--gris-sombra) var(--blanco) var(--blanco) var(--gris-sombra);
+  padding: 1px 0 0 1px;
+}
+
+.ventana__cuerpo {
+  padding: 14px 16px;
+  background: var(--gris);
+}
+
+/* Cuerpo "de documento": fondo blanco hundido, para textos largos */
+.ventana__cuerpo--papel {
+  background: var(--blanco);
+  border: 2px solid;
+  border-color: var(--gris-sombra) var(--blanco) var(--blanco) var(--gris-sombra);
+  margin: 3px;
+}
+
+/* Ventana minimizada por el botón ✕ / _ */
+.ventana.plegada .ventana__cuerpo { display: none; }
+
+/* ==========================================================================
+   TIPOGRAFÍA DENTRO DE VENTANAS
+   ========================================================================== */
+
+.ventana__cuerpo h2 {
+  font-size: 17px;
+  margin: 0 0 10px;
+  color: var(--azul-barra-1);
+  border-bottom: 2px groove var(--gris-claro);
+  padding-bottom: 4px;
+}
+
+.ventana__cuerpo h3 {
+  font-size: 14px;
+  margin: 18px 0 6px;
+  color: #7a0060;
+}
+.ventana__cuerpo h3:first-child { margin-top: 0; }
+
+.ventana__cuerpo h4 {
+  font-size: 13px;
+  margin: 14px 0 4px;
+  color: var(--azul-barra-1);
+}
+
+.ventana__cuerpo p  { margin: 0 0 10px; }
+.ventana__cuerpo ul,
+.ventana__cuerpo ol { margin: 0 0 10px; padding-left: 22px; }
+.ventana__cuerpo li { margin-bottom: 4px; }
+
+a { color: #0000cc; }
+a:visited { color: #6a0dad; }
+a:hover { color: var(--rosa); }
+
+code, kbd, .mono {
+  font-family: var(--fuente-mono);
+  font-size: 12px;
+  background: #ffffcc;
+  border: 1px solid var(--gris-oscuro);
+  padding: 0 3px;
+}
+
+hr {
+  border: 0;
+  border-top: 2px groove var(--blanco);
+  margin: 16px 0;
+}
+
+/* ==========================================================================
+   CONTROLES DE FORMULARIO
+   ========================================================================== */
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 26px;
+  padding: 4px 14px;
+  font-family: var(--fuente);
+  font-size: 13px;
+  color: var(--negro);
+  background: var(--gris);
+  border: 2px solid;
+  border-color: var(--blanco) var(--gris-sombra) var(--gris-sombra) var(--blanco);
+  box-shadow: inset 1px 1px 0 var(--gris-claro), inset -1px -1px 0 var(--gris-oscuro);
+  cursor: pointer;
+  text-decoration: none;
+}
+.boton:hover { background: #dcd8d0; }
+.boton:active {
+  border-color: var(--gris-sombra) var(--blanco) var(--blanco) var(--gris-sombra);
+  box-shadow: inset 1px 1px 0 var(--gris-oscuro);
+  padding: 5px 13px 3px 15px;
+}
+.boton:focus-visible { outline: 1px dotted var(--negro); outline-offset: -5px; }
+.boton[disabled] { color: var(--gris-oscuro); text-shadow: 1px 1px 0 var(--blanco); cursor: not-allowed; }
+
+.boton--principal { font-weight: bold; }
+.boton--peligro   { color: #8b0000; font-weight: bold; }
+
+input[type="text"],
+input[type="email"],
+input[type="date"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+select,
+textarea {
+  font-family: var(--fuente);
+  font-size: 13px;
+  padding: 4px 6px;
+  background: var(--blanco);
+  color: var(--negro);
+  border: 2px solid;
+  border-color: var(--gris-sombra) var(--blanco) var(--blanco) var(--gris-sombra);
+  box-shadow: inset 1px 1px 0 var(--gris-oscuro);
+  max-width: 100%;
+}
+input:focus, select:focus, textarea:focus { outline: 1px dotted var(--azul-barra-1); outline-offset: -4px; }
+textarea { resize: vertical; min-height: 60px; width: 100%; }
+
+label { display: block; font-weight: bold; margin-bottom: 3px; font-size: 12px; }
+
+fieldset {
+  border: 2px groove var(--blanco);
+  padding: 12px;
+  margin: 0 0 14px;
+}
+legend { font-weight: bold; padding: 0 6px; font-size: 12px; }
+
+/* ==========================================================================
+   TABLAS
+   ========================================================================== */
+
+.tabla-scroll { overflow-x: auto; margin-bottom: 12px; }
+
+table.retro {
+  border-collapse: collapse;
+  width: 100%;
+  background: var(--blanco);
+  font-size: 12px;
+  min-width: 420px;
+}
+table.retro th,
+table.retro td {
+  border: 1px solid var(--gris-oscuro);
+  padding: 5px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+table.retro th {
+  background: var(--gris);
+  border-color: var(--blanco) var(--gris-sombra) var(--gris-sombra) var(--blanco);
+  border-width: 2px;
+  border-style: solid;
+  font-size: 12px;
+}
+table.retro tbody tr:nth-child(even) td { background: #f2f2f2; }
+
+/* ==========================================================================
+   BARRA DE PROGRESO (la del instalador de Windows)
+   ========================================================================== */
+
+.progreso {
+  height: 18px;
+  background: var(--blanco);
+  border: 2px solid;
+  border-color: var(--gris-sombra) var(--blanco) var(--blanco) var(--gris-sombra);
+  padding: 2px;
+  overflow: hidden;
+}
+.progreso__relleno {
+  height: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--azul-seleccion) 0 10px,
+    transparent 10px 12px
+  );
+  background-size: 12px 100%;
+  animation: progreso-marcha .7s linear infinite;
+  width: 100%;
+}
+@keyframes progreso-marcha {
+  from { background-position: 0 0; }
+  to   { background-position: 12px 0; }
+}
+
+/* ==========================================================================
+   BARRA DE TAREAS + MENÚ INICIO
+   ========================================================================== */
+
+.barra-tareas {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 3px 6px calc(3px + env(safe-area-inset-bottom, 0px));
+  background: var(--gris);
+  border-top: 2px solid var(--blanco);
+  box-shadow: 0 -2px 6px rgba(0,0,0,.4);
+}
+
+.boton-inicio {
+  font-weight: bold;
+  font-size: 13px;
+  padding: 4px 12px;
+  min-height: 28px;
+  gap: 6px;
+}
+.boton-inicio.abierto {
+  border-color: var(--gris-sombra) var(--blanco) var(--blanco) var(--gris-sombra);
+  background: #c8c4bc;
+}
+
+.barra-tareas__centro {
+  flex: 1 1 auto;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.bandeja {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  font-size: 11px;
+  padding: 4px 8px;
+  border: 2px solid;
+  border-color: var(--gris-sombra) var(--blanco) var(--blanco) var(--gris-sombra);
+  background: var(--gris);
+}
+
+/* Menú Inicio desplegable */
+.menu-inicio {
+  position: fixed;
+  left: 6px;
+  bottom: calc(44px + env(safe-area-inset-bottom, 0px));
+  z-index: 950;
+  width: 260px;
+  max-width: calc(100vw - 12px);
+  background: var(--gris);
+  border: 2px solid;
+  border-color: var(--blanco) var(--gris-sombra) var(--gris-sombra) var(--blanco);
+  box-shadow: 4px 4px 0 rgba(0,0,0,.4);
+  padding: 3px;
+  display: flex;
+}
+.menu-inicio[hidden] { display: none !important; }
+
+/* La franja vertical azul con el texto girado, como en Windows 98 */
+.menu-inicio__franja {
+  width: 26px;
+  flex: 0 0 26px;
+  background: linear-gradient(180deg, var(--azul-barra-1), var(--morado));
+  color: var(--blanco);
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+}
+.menu-inicio__franja span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+
+.menu-inicio__lista { flex: 1 1 auto; list-style: none; margin: 0; padding: 0; }
+.menu-inicio__lista a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  font-size: 13px;
+  color: var(--negro);
+  text-decoration: none;
+}
+.menu-inicio__lista a:hover,
+.menu-inicio__lista a:focus {
+  background: var(--azul-seleccion);
+  color: var(--blanco);
+  outline: none;
+}
+.menu-inicio__lista li.separador {
+  height: 2px;
+  margin: 4px 6px;
+  border-top: 2px groove var(--blanco);
+}
+.menu-inicio__lista img { width: 16px; height: 16px; image-rendering: pixelated; }
+
+/* ==========================================================================
+   LAYOUT GENERAL
+   ========================================================================== */
+
+.pagina {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.rejilla {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.columnas-2 {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 1.6fr 1fr;
+  align-items: start;
+}
+
+/* Por defecto una celda de grid nunca se encoge por debajo de su contenido,
+   así que una tabla ancha arrastraría toda la columna y rompería el ancho de
+   la página en el móvil. Con min-width:0 la celda sí se encoge y la tabla se
+   queda con su propio scroll horizontal dentro de .tabla-scroll. */
+.rejilla > *,
+.columnas-2 > * { min-width: 0; }
+
+@media (max-width: 760px) {
+  .columnas-2 { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 520px) {
+  body { font-size: 14px; }
+  .pagina { padding: 10px; }
+  .ventana__cuerpo { padding: 12px 11px; }
+  .rejilla { grid-template-columns: 1fr; }
+}

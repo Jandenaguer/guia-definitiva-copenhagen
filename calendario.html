@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calendario de visitas · Guía de Copenhague</title>
+<meta name="description" content="Apúntate con tus fechas y mira qué días están ya ocupados por otras visitas.">
+<link rel="icon" href="img/pixel/calendario.svg">
+<link rel="stylesheet" href="css/win98.css">
+<link rel="stylesheet" href="css/retro.css">
+<link rel="stylesheet" href="css/calendario.css">
+</head>
+<body>
+
+<div class="pagina">
+
+  <header class="cabecera">
+    <img class="cabecera__logo" src="img/pixel/logo.svg" alt="Guía definitiva de Copenhague">
+    <p class="cabecera__lema">&#128197; Calendario de visitas</p>
+  </header>
+
+  <nav class="migas">
+    <a href="index.html">&#127968; Inicio</a> &rsaquo;
+    <strong>Calendario de visitas</strong>
+  </nav>
+
+  <div class="demo-aviso" id="avisoDemo" hidden>
+    <div class="demo-aviso__interior">
+      <strong>&#9888; MODO DEMO</strong> — Todavía no hay backend conectado, así que las reservas
+      se guardan <strong>solo en este navegador</strong> y no se envía ningún correo.
+      Mario: pega la URL de tu Apps Script en <code>js/config.js</code> y esto desaparece.
+      (Las reservas de "Laura" y "Javi" son de ejemplo.)
+    </div>
+  </div>
+
+  <div class="columnas-2">
+
+    <!-- ================================================ CALENDARIO -->
+    <div>
+      <section class="ventana">
+        <div class="ventana__barra ventana__barra--rojo">
+          <img class="ventana__icono" src="img/pixel/calendario.svg" alt="">
+          <span class="ventana__titulo">Quién viene y cuándo</span>
+        </div>
+        <div class="ventana__cuerpo">
+
+          <div class="cal-nav">
+            <button type="button" class="boton" id="calAnterior" aria-label="Mes anterior">&#9664;</button>
+            <div class="cal-nav__mes" id="calMes">…</div>
+            <button type="button" class="boton" id="calHoy">Hoy</button>
+            <button type="button" class="boton" id="calSiguiente" aria-label="Mes siguiente">&#9654;</button>
+          </div>
+
+          <div class="cal-rejilla" id="calRejilla"></div>
+
+          <div class="cal-leyenda" id="calLeyenda"></div>
+
+          <p class="pequeno" style="margin-top:10px">
+            &#9654; día de llegada &nbsp;·&nbsp; &#9664; día de salida &nbsp;·&nbsp;
+            los días en rojo claro son los que tienen más gente que camas.
+          </p>
+        </div>
+      </section>
+
+      <section class="ventana">
+        <div class="ventana__barra ventana__barra--verde">
+          <img class="ventana__icono" src="img/pixel/chat.svg" alt="">
+          <span class="ventana__titulo">Apúntate</span>
+        </div>
+        <div class="ventana__cuerpo">
+
+          <p>Rellena esto y ya está. Mario recibe un correo al momento con tu nombre
+          y tus fechas, y todo el mundo ve el calendario actualizado.</p>
+
+          <form id="formReserva" novalidate>
+            <fieldset>
+              <legend>Tus datos</legend>
+
+              <div class="form-fila">
+                <div>
+                  <label for="campoNombre">Nombre *</label>
+                  <input type="text" id="campoNombre" name="nombre" maxlength="60"
+                         placeholder="Cómo te conoce Mario" required autocomplete="name">
+                </div>
+                <div>
+                  <label for="campoEmail">Email (opcional)</label>
+                  <input type="email" id="campoEmail" name="email" maxlength="120"
+                         placeholder="Por si hay que avisarte" autocomplete="email">
+                </div>
+              </div>
+
+              <div class="form-fila">
+                <div>
+                  <label for="campoLlegada">Llegada *</label>
+                  <input type="date" id="campoLlegada" name="llegada" required>
+                </div>
+                <div>
+                  <label for="campoSalida">Salida *</label>
+                  <input type="date" id="campoSalida" name="salida" required>
+                </div>
+              </div>
+
+              <div>
+                <label for="campoNota">¿Algo que deba saber? (opcional)</label>
+                <textarea id="campoNota" name="nota" maxlength="400"
+                          placeholder="Vengo con mi pareja / llego de madrugada / me da igual dormir en el sofá…"></textarea>
+              </div>
+
+              <div id="avisoSolape" aria-live="polite"></div>
+
+              <p style="margin:14px 0 0">
+                <button type="submit" class="boton boton--principal" id="botonApuntarse">
+                  &#128197; Apuntarme
+                </button>
+              </p>
+            </fieldset>
+          </form>
+
+          <div id="estadoEnvio" aria-live="polite"></div>
+
+          <p class="pequeno mb-0">
+            Solo se guardan los datos que escribes aquí. El email es opcional y no se muestra
+            a nadie más: solo le llega a Mario.
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==================================================== LATERAL -->
+    <div>
+      <section class="ventana">
+        <div class="ventana__barra ventana__barra--morado">
+          <img class="ventana__icono" src="img/pixel/casa.svg" alt="">
+          <span class="ventana__titulo">Visitas apuntadas</span>
+        </div>
+        <div class="ventana__cuerpo">
+          <div id="listaReservas"></div>
+        </div>
+      </section>
+
+      <section class="ventana">
+        <div class="ventana__barra ventana__barra--naranja">
+          <img class="ventana__icono" src="img/pixel/info.svg" alt="">
+          <span class="ventana__titulo">Cómo funciona esto</span>
+        </div>
+        <div class="ventana__cuerpo">
+          <ul class="mb-0" style="padding-left:18px;font-size:12px">
+            <li>Te apuntas con tu nombre y tus fechas.</li>
+            <li>Todos veis el calendario, así nadie se pisa sin querer.</li>
+            <li>Si tus fechas chocan con las de otro, <strong>te avisa pero no te bloquea</strong>:
+                a lo mejor cabéis o preferís coincidir.</li>
+            <li>Mario recibe un correo cada vez que alguien se apunta.</li>
+            <li>Si te tienes que echar atrás, <strong>díselo a Mario</strong> y él lo borra.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="ventana">
+        <div class="ventana__barra">
+          <img class="ventana__icono" src="img/pixel/casa.svg" alt="">
+          <span class="ventana__titulo">La casa</span>
+        </div>
+        <div class="ventana__cuerpo">
+          <p class="mb-0 pequeno">
+            <strong>Lundtoftevej 162, G, 1.12</strong><br>
+            2800 Kongens Lyngby<br><br>
+            Es una habitación de residencia de estudiantes, así que el espacio es el que es:
+            <strong>caben cómodamente 2 personas</strong>. Si sois más, se puede apañar,
+            pero avisad antes.
+          </p>
+          <p style="margin:10px 0 0">
+            <a class="boton" href="transporte.html#aeropuerto">Cómo llegar desde el aeropuerto</a>
+          </p>
+        </div>
+      </section>
+
+      <section class="ventana">
+        <div class="ventana__barra ventana__barra--verde">
+          <img class="ventana__icono" src="img/pixel/estrella.svg" alt="">
+          <span class="ventana__titulo">Cuándo venir</span>
+        </div>
+        <div class="ventana__cuerpo">
+          <ul class="mb-0 pequeno" style="padding-left:18px">
+            <li><strong>Mayo–agosto:</strong> lo mejor. Luz hasta las 22:30, terrazas, baños
+                en el puerto y todo abierto.</li>
+            <li><strong>Septiembre–octubre:</strong> bonito, más barato y con la berrea
+                de los ciervos.</li>
+            <li><strong>Diciembre:</strong> mercados de Navidad y Tivoli iluminado,
+                pero de noche a las 15:45.</li>
+            <li><strong>Enero–febrero:</strong> honestamente, duro. Ven si te da igual
+                el frío y la oscuridad.</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <footer class="pie">
+    <p><a href="index.html">&laquo; Volver al inicio</a> · <a href="admin.html">Panel de administración</a></p>
+  </footer>
+
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/calendario.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>

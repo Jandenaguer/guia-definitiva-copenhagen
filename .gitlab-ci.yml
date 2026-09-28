@@ -1,0 +1,28 @@
+# ============================================================================
+#  Publicación en GitLab Pages
+# ----------------------------------------------------------------------------
+#  La web es HTML/CSS/JS puro: no hay nada que compilar. GitLab Pages solo
+#  publica lo que encuentre en la carpeta `public/`, así que este trabajo se
+#  limita a copiar los archivos del sitio dentro de `public/`.
+#
+#  Solo se ejecuta en la rama principal.
+# ============================================================================
+
+stages:
+  - deploy
+
+pages:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - mkdir -p public
+    # Páginas (incluye 404.html, que GitLab Pages usa automáticamente)
+    - cp *.html public/
+    # Estilos, scripts, datos e imágenes
+    - cp -r css js data img public/
+    - echo "Publicados $(find public -type f | wc -l) archivos."
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

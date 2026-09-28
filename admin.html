@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Administración · Guía de Copenhague</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="img/pixel/llave.svg">
+<link rel="stylesheet" href="css/win98.css">
+<link rel="stylesheet" href="css/retro.css">
+<link rel="stylesheet" href="css/calendario.css">
+</head>
+<body>
+
+<div class="pagina">
+
+  <header class="cabecera">
+    <img class="cabecera__logo" src="img/pixel/logo.svg" alt="Guía definitiva de Copenhague">
+    <p class="cabecera__lema">&#128273; Panel de administración</p>
+  </header>
+
+  <nav class="migas">
+    <a href="index.html">&#127968; Inicio</a> &rsaquo;
+    <a href="calendario.html">Calendario</a> &rsaquo;
+    <strong>Admin</strong>
+  </nav>
+
+  <div class="demo-aviso" id="avisoDemoAdmin" hidden>
+    <div class="demo-aviso__interior">
+      <strong>&#9888; MODO DEMO</strong> — Sin backend conectado.
+      La contraseña de prueba es <code>demo</code> y solo verás las reservas
+      guardadas en este navegador.
+    </div>
+  </div>
+
+  <!-- ============================================================ LOGIN -->
+  <section class="ventana" id="ventanaLogin" style="max-width:420px;margin:0 auto 22px">
+    <div class="ventana__barra ventana__barra--rojo">
+      <img class="ventana__icono" src="img/pixel/llave.svg" alt="">
+      <span class="ventana__titulo">Identifícate</span>
+    </div>
+    <div class="ventana__cuerpo">
+      <form id="formLogin">
+        <label for="campoPassword">Contraseña de administrador</label>
+        <input type="password" id="campoPassword" autocomplete="current-password"
+               style="width:100%" placeholder="••••••••">
+        <p style="margin:12px 0 0">
+          <button type="submit" class="boton boton--principal" id="botonEntrar">Entrar</button>
+        </p>
+      </form>
+      <div id="estadoLogin" aria-live="polite" style="margin-top:10px"></div>
+      <hr>
+      <p class="pequeno mb-0">
+        La contraseña no está guardada en esta web: se comprueba en el servidor.
+        Si te la olvidas, la cambias en las <em>Script Properties</em> de tu proyecto
+        de Apps Script.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================ PANEL -->
+  <section class="ventana" id="ventanaPanel" hidden>
+    <div class="ventana__barra ventana__barra--rojo">
+      <img class="ventana__icono" src="img/pixel/llave.svg" alt="">
+      <span class="ventana__titulo">Reservas · editar y borrar</span>
+    </div>
+    <div class="ventana__cuerpo">
+
+      <p>
+        <button type="button" class="boton" id="botonSalir">Cerrar sesión</button>
+        <a class="boton" href="calendario.html">Ver el calendario público</a>
+      </p>
+
+      <div id="estadoPanel" aria-live="polite"></div>
+
+      <div class="tabla-scroll">
+        <table class="retro tabla-admin" style="min-width:700px">
+          <thead>
+            <tr>
+              <th style="width:20%">Nombre</th>
+              <th style="width:15%">Llegada</th>
+              <th style="width:15%">Salida</th>
+              <th style="width:7%">Noches</th>
+              <th style="width:26%">Nota</th>
+              <th style="width:17%">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaReservas"></tbody>
+        </table>
+      </div>
+
+      <p class="pequeno mb-0">
+        Cambia lo que quieras en la fila y pulsa <strong>Guardar</strong>.
+        <strong>Borrar</strong> pide confirmación y no se puede deshacer
+        (aunque la fila se queda marcada en la hoja de cálculo, por si acaso).
+      </p>
+    </div>
+  </section>
+
+  <footer class="pie">
+    <p><a href="index.html">&laquo; Volver al inicio</a></p>
+  </footer>
+
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/admin.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>

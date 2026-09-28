@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Créditos de las fotos · Guía de Copenhague</title>
+<meta name="description" content="Autoría y licencia de todas las fotografías usadas en esta guía.">
+<link rel="icon" href="img/pixel/camara.svg">
+<link rel="stylesheet" href="css/win98.css">
+<link rel="stylesheet" href="css/retro.css">
+</head>
+<body>
+
+<div class="pagina">
+
+  <header class="cabecera">
+    <img class="cabecera__logo" src="img/pixel/logo.svg" alt="Guía definitiva de Copenhague">
+  </header>
+
+  <nav class="migas">
+    <a href="index.html">&#127968; Inicio</a> &rsaquo;
+    <strong>Créditos de las fotos</strong>
+  </nav>
+
+  <section class="ventana">
+    <div class="ventana__barra ventana__barra--naranja">
+      <img class="ventana__icono" src="img/pixel/camara.svg" alt="">
+      <span class="ventana__titulo">De dónde salen las imágenes</span>
+    </div>
+    <div class="ventana__cuerpo">
+      <p>Todas las fotografías de esta guía vienen de
+      <strong><a href="https://commons.wikimedia.org/" rel="noopener">Wikimedia Commons</a></strong>
+      y se usan bajo licencias libres (Creative Commons, dominio público o equivalentes).
+      Aquí abajo está el autor, la licencia y el enlace al archivo original de cada una,
+      como exigen esas licencias.</p>
+
+      <p><strong>Los dibujos, iconos, el logotipo y los botones 88x31 son originales</strong>,
+      hechos como pixel art en SVG para esta web. No se ha copiado ningún logotipo ni gráfico
+      de Habbo Hotel, MSN Messenger ni Microsoft: el aire retro está reproducido desde cero
+      con CSS.</p>
+
+      <p class="mb-0">Los mapas enlazan a
+      <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a>,
+      © colaboradores de OpenStreetMap.</p>
+    </div>
+  </section>
+
+  <section class="ventana">
+    <div class="ventana__barra">
+      <img class="ventana__icono" src="img/pixel/camara.svg" alt="">
+      <span class="ventana__titulo">Listado completo</span>
+    </div>
+    <div class="ventana__cuerpo" data-creditos></div>
+  </section>
+
+  <section class="ventana">
+    <div class="ventana__barra ventana__barra--morado">
+      <img class="ventana__icono" src="img/pixel/pc.svg" alt="">
+      <span class="ventana__titulo">Para Mario: cómo cambiar una foto</span>
+    </div>
+    <div class="ventana__cuerpo">
+      <ol class="mb-0">
+        <li>Mete tu foto en <code>img/fotos/</code> con el mismo nombre que la que sustituyes
+            (por ejemplo <code>nyhavn.jpg</code>). Redimensiónala a unos 800–1000 px de ancho
+            para que la web no pese.</li>
+        <li>Abre <code>data/creditos.js</code> y cambia esa entrada:
+            <code>autor: "Mario"</code>, <code>licencia: "Foto propia"</code>,
+            <code>fuente: ""</code>.</li>
+        <li>Si añades una foto nueva, crea una entrada con una clave nueva y úsala poniendo
+            <code>foto: 'tu-clave'</code> en <code>data/monumentos.js</code>, o
+            <code>&lt;div data-foto="tu-clave" data-alt="Descripción"&gt;&lt;/div&gt;</code>
+            dentro de cualquier página.</li>
+      </ol>
+    </div>
+  </section>
+
+  <footer class="pie">
+    <p><a href="index.html">&laquo; Volver al inicio</a></p>
+  </footer>
+
+</div>
+
+<script src="js/config.js"></script>
+<script src="data/creditos.js"></script>
+<script src="js/contenido.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>
